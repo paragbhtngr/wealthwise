@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -96,6 +96,9 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
       <DialogContent className="max-w-md" data-testid="modal-add-category">
         <DialogHeader>
           <DialogTitle>Add Category</DialogTitle>
+          <DialogDescription>
+            Create a new category to organize your transactions by type.
+          </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">

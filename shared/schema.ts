@@ -48,6 +48,8 @@ export const insertCategorySchema = createInsertSchema(categories).omit({
 export const insertTransactionSchema = createInsertSchema(transactions).omit({
   id: true,
   createdAt: true,
+}).extend({
+  date: z.coerce.date(),
 });
 
 export const insertGlossaryTermSchema = createInsertSchema(glossaryTerms).omit({

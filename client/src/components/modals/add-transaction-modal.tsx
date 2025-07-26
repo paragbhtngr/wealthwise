@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -93,7 +93,7 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
       categoryId: formData.categoryId,
       description: formData.description,
       accountId: formData.accountId,
-      date: new Date(formData.date),
+      date: formData.date, // Keep as string for z.coerce.date() to handle
     });
   };
 
@@ -102,6 +102,9 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
       <DialogContent className="max-w-md" data-testid="modal-add-transaction">
         <DialogHeader>
           <DialogTitle>Add Transaction</DialogTitle>
+          <DialogDescription>
+            Add a new income or expense transaction to track your finances.
+          </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">

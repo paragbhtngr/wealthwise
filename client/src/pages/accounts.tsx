@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, Plus, Building2, Wallet, CreditCard, TrendingUp } from "lucide-react";
 import Topbar from "@/components/layout/topbar";
@@ -381,6 +381,9 @@ export default function Accounts() {
         <DialogContent className="max-w-md" data-testid="modal-account">
           <DialogHeader>
             <DialogTitle>{editingAccount ? "Edit Account" : "Add Account"}</DialogTitle>
+            <DialogDescription>
+              {editingAccount ? "Update the account details below." : "Create a new financial account to track your money."}
+            </DialogDescription>
           </DialogHeader>
           
           <form onSubmit={handleSubmit} className="space-y-4">

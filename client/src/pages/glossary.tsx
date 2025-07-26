@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Search, Plus, Edit, Trash2, Book } from "lucide-react";
 import Topbar from "@/components/layout/topbar";
 import { useToast } from "@/hooks/use-toast";
@@ -309,6 +309,9 @@ export default function Glossary() {
         <DialogContent className="max-w-2xl" data-testid="modal-glossary-term">
           <DialogHeader>
             <DialogTitle>{editingTerm ? "Edit Term" : "Add Glossary Term"}</DialogTitle>
+            <DialogDescription>
+              {editingTerm ? "Update the financial term definition." : "Add a new financial term to the glossary."}
+            </DialogDescription>
           </DialogHeader>
           
           <form onSubmit={handleSubmit} className="space-y-4">
