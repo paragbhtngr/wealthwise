@@ -4,10 +4,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Trash2, Plus, Building2, Wallet, CreditCard, TrendingUp } from "lucide-react";
+import {
+  Edit,
+  Trash2,
+  Plus,
+  Building2,
+  Wallet,
+  CreditCard,
+  TrendingUp,
+} from "lucide-react";
 import Topbar from "@/components/layout/topbar";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -22,7 +42,7 @@ const accountTypeIcons = {
 
 const accountTypeLabels = {
   checking: "Checking Account",
-  savings: "Savings Account", 
+  savings: "Savings Account",
   credit: "Credit Card",
   investment: "Investment Account",
 };
@@ -68,7 +88,13 @@ export default function Accounts() {
   });
 
   const updateAccountMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: Partial<InsertAccount> }) => {
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Partial<InsertAccount>;
+    }) => {
       const response = await apiRequest("PUT", `/api/accounts/${id}`, data);
       return response.json();
     },
@@ -113,7 +139,8 @@ export default function Accounts() {
   // Set default account if none selected
   useEffect(() => {
     if (!selectedAccountId && accounts.length > 0) {
-      const defaultAccount = accounts.find(acc => acc.isDefault) || accounts[0];
+      const defaultAccount =
+        accounts.find((acc) => acc.isDefault) || accounts[0];
       setSelectedAccountId(defaultAccount.id);
     }
   }, [selectedAccountId, accounts]);
@@ -151,7 +178,7 @@ export default function Accounts() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       toast({
         title: "Error",
@@ -178,43 +205,67 @@ export default function Accounts() {
     };
 
     if (editingAccount) {
-      updateAccountMutation.mutate({ id: editingAccount.id, data: accountData });
+      updateAccountMutation.mutate({
+        id: editingAccount.id,
+        data: accountData,
+      });
     } else {
       createAccountMutation.mutate(accountData);
     }
   };
 
   const handleDeleteAccount = (account: Account) => {
-    if (window.confirm(`Are you sure you want to delete "${account.name}"? This will also delete all associated transactions.`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to delete "${account.name}"? This will also delete all associated transactions.`
+      )
+    ) {
       deleteAccountMutation.mutate(account.id);
     }
   };
 
-  const totalBalance = accounts.reduce((sum, acc) => sum + parseFloat(acc.balance), 0);
-  const positiveAccounts = accounts.filter(acc => parseFloat(acc.balance) >= 0);
-  const negativeAccounts = accounts.filter(acc => parseFloat(acc.balance) < 0);
+  const totalBalance = accounts.reduce(
+    (sum, acc) => sum + parseFloat(acc.balance),
+    0
+  );
+  const positiveAccounts = accounts.filter(
+    (acc) => parseFloat(acc.balance) >= 0
+  );
+  const negativeAccounts = accounts.filter(
+    (acc) => parseFloat(acc.balance) < 0
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Topbar title="Accounts" selectedAccountId={selectedAccountId} />
-      
+
       <div className="p-6 space-y-6">
         {/* Summary Card */}
         <Card data-testid="card-accounts-summary">
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <p className="text-sm font-medium text-gray-600">Total Net Worth</p>
-                <p className={`text-3xl font-bold ${totalBalance >= 0 ? 'text-income' : 'text-expense'}`}>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Net Worth
+                </p>
+                <p
+                  className={`text-3xl font-bold ${
+                    totalBalance >= 0 ? "text-income" : "text-expense"
+                  }`}
+                >
                   ${totalBalance.toFixed(2)}
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-sm font-medium text-gray-600">Total Accounts</p>
-                <p className="text-3xl font-bold text-gray-900">{accounts.length}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Accounts
+                </p>
+                <p className="text-3xl font-bold text-gray-900">
+                  {accounts.length}
+                </p>
               </div>
               <div className="text-center">
-                <Button 
+                <Button
                   onClick={openAddModal}
                   className="bg-primary hover:bg-blue-700"
                   data-testid="button-add-account"
@@ -233,8 +284,13 @@ export default function Accounts() {
           <div className="text-center py-12">
             <Building2 className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <p className="text-gray-500">No accounts found</p>
-            <p className="text-sm text-gray-400 mb-4">Create your first account to get started</p>
-            <Button onClick={openAddModal} className="bg-primary hover:bg-blue-700">
+            <p className="text-sm text-gray-400 mb-4">
+              Create your first account to get started
+            </p>
+            <Button
+              onClick={openAddModal}
+              className="bg-primary hover:bg-blue-700"
+            >
               <Plus className="w-4 h-4 mr-2" />
               Add Account
             </Button>
@@ -242,26 +298,43 @@ export default function Accounts() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {accounts.map((account) => {
-              const Icon = accountTypeIcons[account.type as keyof typeof accountTypeIcons] || Wallet;
+              const Icon =
+                accountTypeIcons[
+                  account.type as keyof typeof accountTypeIcons
+                ] || Wallet;
               const balance = parseFloat(account.balance);
               const isPositive = balance >= 0;
-              
+
               return (
-                <Card 
-                  key={account.id} 
+                <Card
+                  key={account.id}
                   className="hover:shadow-lg transition-shadow"
                   data-testid={`card-account-${account.id}`}
                 >
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isPositive ? 'bg-blue-100' : 'bg-red-100'}`}>
-                          <Icon className={`w-5 h-5 ${isPositive ? 'text-primary' : 'text-expense'}`} />
+                        <div
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            isPositive ? "bg-blue-100" : "bg-red-100"
+                          }`}
+                        >
+                          <Icon
+                            className={`w-5 h-5 ${
+                              isPositive ? "text-primary" : "text-expense"
+                            }`}
+                          />
                         </div>
                         <div>
-                          <CardTitle className="text-lg">{account.name}</CardTitle>
+                          <CardTitle className="text-lg">
+                            {account.name}
+                          </CardTitle>
                           <p className="text-sm text-gray-500">
-                            {accountTypeLabels[account.type as keyof typeof accountTypeLabels]}
+                            {
+                              accountTypeLabels[
+                                account.type as keyof typeof accountTypeLabels
+                              ]
+                            }
                           </p>
                         </div>
                       </div>
@@ -272,20 +345,26 @@ export default function Accounts() {
                       )}
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent className="pt-0">
                     <div className="flex items-center justify-between mb-4">
-                      <p className="text-sm font-medium text-gray-600">Balance</p>
-                      <p className={`text-2xl font-bold ${isPositive ? 'text-income' : 'text-expense'}`}>
+                      <p className="text-sm font-medium text-gray-600">
+                        Balance
+                      </p>
+                      <p
+                        className={`text-2xl font-bold ${
+                          isPositive ? "text-income" : "text-expense"
+                        }`}
+                      >
                         ${Math.abs(balance).toFixed(2)}
-                        {!isPositive && ' CR'}
+                        {!isPositive && " CR"}
                       </p>
                     </div>
-                    
+
                     <div className="flex space-x-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         className="flex-1"
                         onClick={() => openEditModal(account)}
                         data-testid={`button-edit-account-${account.id}`}
@@ -293,8 +372,8 @@ export default function Accounts() {
                         <Edit className="w-4 h-4 mr-2" />
                         Edit
                       </Button>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={() => handleDeleteAccount(account)}
                         className="text-red-600 hover:text-red-700 hover:border-red-300"
@@ -320,10 +399,15 @@ export default function Accounts() {
               <CardContent>
                 <div className="space-y-3">
                   {positiveAccounts.length === 0 ? (
-                    <p className="text-gray-500 text-center py-4">No asset accounts</p>
+                    <p className="text-gray-500 text-center py-4">
+                      No asset accounts
+                    </p>
                   ) : (
                     positiveAccounts.map((account) => (
-                      <div key={account.id} className="flex items-center justify-between">
+                      <div
+                        key={account.id}
+                        className="flex items-center justify-between"
+                      >
                         <span className="text-gray-900">{account.name}</span>
                         <span className="font-semibold text-income">
                           ${parseFloat(account.balance).toFixed(2)}
@@ -335,7 +419,13 @@ export default function Accounts() {
                     <div className="border-t pt-3 flex items-center justify-between font-semibold">
                       <span>Total Assets</span>
                       <span className="text-income">
-                        ${positiveAccounts.reduce((sum, acc) => sum + parseFloat(acc.balance), 0).toFixed(2)}
+                        $
+                        {positiveAccounts
+                          .reduce(
+                            (sum, acc) => sum + parseFloat(acc.balance),
+                            0
+                          )
+                          .toFixed(2)}
                       </span>
                     </div>
                   )}
@@ -345,15 +435,22 @@ export default function Accounts() {
 
             <Card data-testid="card-liabilities">
               <CardHeader>
-                <CardTitle className="text-lg text-expense">Liabilities</CardTitle>
+                <CardTitle className="text-lg text-expense">
+                  Liabilities
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {negativeAccounts.length === 0 ? (
-                    <p className="text-gray-500 text-center py-4">No liability accounts</p>
+                    <p className="text-gray-500 text-center py-4">
+                      No liability accounts
+                    </p>
                   ) : (
                     negativeAccounts.map((account) => (
-                      <div key={account.id} className="flex items-center justify-between">
+                      <div
+                        key={account.id}
+                        className="flex items-center justify-between"
+                      >
                         <span className="text-gray-900">{account.name}</span>
                         <span className="font-semibold text-expense">
                           ${Math.abs(parseFloat(account.balance)).toFixed(2)}
@@ -365,7 +462,13 @@ export default function Accounts() {
                     <div className="border-t pt-3 flex items-center justify-between font-semibold">
                       <span>Total Liabilities</span>
                       <span className="text-expense">
-                        ${Math.abs(negativeAccounts.reduce((sum, acc) => sum + parseFloat(acc.balance), 0)).toFixed(2)}
+                        $
+                        {Math.abs(
+                          negativeAccounts.reduce(
+                            (sum, acc) => sum + parseFloat(acc.balance),
+                            0
+                          )
+                        ).toFixed(2)}
                       </span>
                     </div>
                   )}
@@ -380,12 +483,16 @@ export default function Accounts() {
       <Dialog open={showAddModal} onOpenChange={closeModal}>
         <DialogContent className="max-w-md" data-testid="modal-account">
           <DialogHeader>
-            <DialogTitle>{editingAccount ? "Edit Account" : "Add Account"}</DialogTitle>
+            <DialogTitle>
+              {editingAccount ? "Edit Account" : "Add Account"}
+            </DialogTitle>
             <DialogDescription>
-              {editingAccount ? "Update the account details below." : "Create a new financial account to track your money."}
+              {editingAccount
+                ? "Update the account details below."
+                : "Create a new financial account to track your money."}
             </DialogDescription>
           </DialogHeader>
-          
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="name">Account Name</Label>
@@ -395,16 +502,23 @@ export default function Accounts() {
                 required
                 placeholder="Enter account name"
                 value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
                 data-testid="input-account-name"
               />
             </div>
 
             <div>
               <Label htmlFor="type">Account Type</Label>
-              <Select 
-                value={formData.type} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, type: value as keyof typeof accountTypeLabels }))}
+              <Select
+                value={formData.type}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    type: value as keyof typeof accountTypeLabels,
+                  }))
+                }
               >
                 <SelectTrigger data-testid="select-account-type">
                   <SelectValue />
@@ -431,7 +545,12 @@ export default function Accounts() {
                   className="pl-8"
                   placeholder="0.00"
                   value={formData.balance}
-                  onChange={(e) => setFormData(prev => ({ ...prev, balance: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      balance: e.target.value,
+                    }))
+                  }
                   data-testid="input-account-balance"
                 />
               </div>
@@ -445,7 +564,12 @@ export default function Accounts() {
                 type="checkbox"
                 id="isDefault"
                 checked={formData.isDefault}
-                onChange={(e) => setFormData(prev => ({ ...prev, isDefault: e.target.checked }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    isDefault: e.target.checked,
+                  }))
+                }
                 className="rounded border-gray-300 text-primary focus:ring-primary"
                 data-testid="checkbox-default-account"
               />
@@ -455,19 +579,26 @@ export default function Accounts() {
             </div>
 
             <div className="flex space-x-3 pt-4">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="flex-1 bg-primary hover:bg-blue-700"
-                disabled={createAccountMutation.isPending || updateAccountMutation.isPending}
+                disabled={
+                  createAccountMutation.isPending ||
+                  updateAccountMutation.isPending
+                }
                 data-testid="button-submit-account"
               >
-                {(createAccountMutation.isPending || updateAccountMutation.isPending) 
-                  ? (editingAccount ? "Updating..." : "Creating...") 
-                  : (editingAccount ? "Update Account" : "Create Account")
-                }
+                {createAccountMutation.isPending ||
+                updateAccountMutation.isPending
+                  ? editingAccount
+                    ? "Updating..."
+                    : "Creating..."
+                  : editingAccount
+                  ? "Update Account"
+                  : "Create Account"}
               </Button>
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 variant="outline"
                 onClick={closeModal}
                 data-testid="button-cancel"

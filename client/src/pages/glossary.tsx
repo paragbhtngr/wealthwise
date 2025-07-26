@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Search, Plus, Edit, Trash2, Book } from "lucide-react";
 import Topbar from "@/components/layout/topbar";
 import { useToast } from "@/hooks/use-toast";
@@ -52,7 +58,13 @@ export default function Glossary() {
   });
 
   const updateTermMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: Partial<InsertGlossaryTerm> }) => {
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Partial<InsertGlossaryTerm>;
+    }) => {
       const response = await apiRequest("PUT", `/api/glossary/${id}`, data);
       return response.json();
     },
@@ -94,9 +106,10 @@ export default function Glossary() {
   });
 
   // Filter terms based on search
-  const filteredTerms = glossaryTerms.filter(term =>
-    term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    term.definition.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTerms = glossaryTerms.filter(
+    (term) =>
+      term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      term.definition.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const resetForm = () => {
@@ -128,7 +141,7 @@ export default function Glossary() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.term.trim() || !formData.definition.trim()) {
       toast({
         title: "Error",
@@ -171,16 +184,20 @@ export default function Glossary() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Topbar title="Glossary" selectedAccountId={selectedAccountId} />
-      
+
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Personal Finance Glossary</h2>
-              <p className="text-gray-600">Learn key financial terms and concepts</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Personal Finance Glossary
+              </h2>
+              <p className="text-gray-600">
+                Learn key financial terms and concepts
+              </p>
             </div>
-            <Button 
+            <Button
               onClick={openAddModal}
               className="bg-primary hover:bg-blue-700"
               data-testid="button-add-term"
@@ -189,7 +206,7 @@ export default function Glossary() {
               Add Term
             </Button>
           </div>
-          
+
           {/* Search */}
           <div className="relative mb-6">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
@@ -211,13 +228,20 @@ export default function Glossary() {
             <div className="text-center py-12">
               <Book className="mx-auto h-12 w-12 text-gray-400 mb-4" />
               <p className="text-gray-500">
-                {searchTerm ? "No terms found matching your search" : "No glossary terms available"}
+                {searchTerm
+                  ? "No terms found matching your search"
+                  : "No glossary terms available"}
               </p>
               <p className="text-sm text-gray-400 mb-4">
-                {searchTerm ? "Try a different search term" : "Add your first financial term to get started"}
+                {searchTerm
+                  ? "Try a different search term"
+                  : "Add your first financial term to get started"}
               </p>
               {!searchTerm && (
-                <Button onClick={openAddModal} className="bg-primary hover:bg-blue-700">
+                <Button
+                  onClick={openAddModal}
+                  className="bg-primary hover:bg-blue-700"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Term
                 </Button>
@@ -232,8 +256,8 @@ export default function Glossary() {
                   </h3>
                   <div className="grid gap-4">
                     {groupedTerms[letter].map((term) => (
-                      <Card 
-                        key={term.id} 
+                      <Card
+                        key={term.id}
                         className="hover:shadow-md transition-shadow"
                         data-testid={`term-${term.id}`}
                       >
@@ -243,16 +267,16 @@ export default function Glossary() {
                               {term.term}
                             </CardTitle>
                             <div className="flex space-x-2">
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="sm"
                                 onClick={() => openEditModal(term)}
                                 data-testid={`button-edit-term-${term.id}`}
                               >
                                 <Edit className="w-4 h-4" />
                               </Button>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="sm"
                                 onClick={() => handleDeleteTerm(term)}
                                 className="text-red-600 hover:text-red-700"
@@ -284,15 +308,21 @@ export default function Glossary() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-center space-x-8 text-center">
                   <div>
-                    <p className="text-2xl font-bold text-primary">{glossaryTerms.length}</p>
+                    <p className="text-2xl font-bold text-primary">
+                      {glossaryTerms.length}
+                    </p>
                     <p className="text-sm text-gray-600">Total Terms</p>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-primary">{sortedLetters.length}</p>
+                    <p className="text-2xl font-bold text-primary">
+                      {sortedLetters.length}
+                    </p>
                     <p className="text-sm text-gray-600">Categories</p>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-primary">{filteredTerms.length}</p>
+                    <p className="text-2xl font-bold text-primary">
+                      {filteredTerms.length}
+                    </p>
                     <p className="text-sm text-gray-600">
                       {searchTerm ? "Matching" : "Showing"}
                     </p>
@@ -308,12 +338,16 @@ export default function Glossary() {
       <Dialog open={showAddModal} onOpenChange={closeModal}>
         <DialogContent className="max-w-2xl" data-testid="modal-glossary-term">
           <DialogHeader>
-            <DialogTitle>{editingTerm ? "Edit Term" : "Add Glossary Term"}</DialogTitle>
+            <DialogTitle>
+              {editingTerm ? "Edit Term" : "Add Glossary Term"}
+            </DialogTitle>
             <DialogDescription>
-              {editingTerm ? "Update the financial term definition." : "Add a new financial term to the glossary."}
+              {editingTerm
+                ? "Update the financial term definition."
+                : "Add a new financial term to the glossary."}
             </DialogDescription>
           </DialogHeader>
-          
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="term">Term</Label>
@@ -323,7 +357,9 @@ export default function Glossary() {
                 required
                 placeholder="Enter financial term"
                 value={formData.term}
-                onChange={(e) => setFormData(prev => ({ ...prev, term: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, term: e.target.value }))
+                }
                 data-testid="input-term"
               />
             </div>
@@ -335,29 +371,40 @@ export default function Glossary() {
                 required
                 placeholder="Enter the definition of this financial term"
                 value={formData.definition}
-                onChange={(e) => setFormData(prev => ({ ...prev, definition: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    definition: e.target.value,
+                  }))
+                }
                 className="min-h-32"
                 data-testid="textarea-definition"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Provide a clear, concise explanation that would be helpful for someone learning about personal finance.
+                Provide a clear, concise explanation that would be helpful for
+                someone learning about personal finance.
               </p>
             </div>
 
             <div className="flex space-x-3 pt-4">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="flex-1 bg-primary hover:bg-blue-700"
-                disabled={createTermMutation.isPending || updateTermMutation.isPending}
+                disabled={
+                  createTermMutation.isPending || updateTermMutation.isPending
+                }
                 data-testid="button-submit-term"
               >
-                {(createTermMutation.isPending || updateTermMutation.isPending) 
-                  ? (editingTerm ? "Updating..." : "Creating...") 
-                  : (editingTerm ? "Update Term" : "Add Term")
-                }
+                {createTermMutation.isPending || updateTermMutation.isPending
+                  ? editingTerm
+                    ? "Updating..."
+                    : "Creating..."
+                  : editingTerm
+                  ? "Update Term"
+                  : "Add Term"}
               </Button>
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 variant="outline"
                 onClick={closeModal}
                 data-testid="button-cancel"

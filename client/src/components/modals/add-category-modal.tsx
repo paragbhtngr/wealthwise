@@ -1,10 +1,22 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -27,7 +39,10 @@ const colorOptions = [
   { name: "Indigo", value: "#6366F1" },
 ];
 
-export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalProps) {
+export default function AddCategoryModal({
+  isOpen,
+  onClose,
+}: AddCategoryModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     type: "expense" as "income" | "expense",
@@ -72,7 +87,7 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       toast({
         title: "Error",
@@ -100,7 +115,7 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
             Create a new category to organize your transactions by type.
           </DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="name">Category Name</Label>
@@ -110,16 +125,25 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
               required
               placeholder="Enter category name"
               value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, name: e.target.value }))
+              }
               data-testid="input-category-name"
             />
           </div>
 
           <div>
-            <Label className="block text-sm font-medium text-gray-700 mb-1">Type</Label>
-            <RadioGroup 
-              value={formData.type} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, type: value as "income" | "expense" }))}
+            <Label className="block text-sm font-medium text-gray-700 mb-1">
+              Type
+            </Label>
+            <RadioGroup
+              value={formData.type}
+              onValueChange={(value) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  type: value as "income" | "expense",
+                }))
+              }
               className="flex space-x-4"
               data-testid="radio-category-type"
             >
@@ -133,18 +157,28 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
               </div>
             </RadioGroup>
           </div>
-          
+
           <div>
             <Label htmlFor="color">Color</Label>
-            <Select 
-              value={formData.color} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, color: value }))}
+            <Select
+              value={formData.color}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, color: value }))
+              }
             >
               <SelectTrigger data-testid="select-color">
                 <SelectValue>
                   <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 rounded-full" style={{ backgroundColor: formData.color }} />
-                    <span>{colorOptions.find(c => c.value === formData.color)?.name}</span>
+                    <div
+                      className="w-4 h-4 rounded-full"
+                      style={{ backgroundColor: formData.color }}
+                    />
+                    <span>
+                      {
+                        colorOptions.find((c) => c.value === formData.color)
+                          ?.name
+                      }
+                    </span>
                   </div>
                 </SelectValue>
               </SelectTrigger>
@@ -152,7 +186,10 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
                 {colorOptions.map((color) => (
                   <SelectItem key={color.value} value={color.value}>
                     <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: color.value }} />
+                      <div
+                        className="w-4 h-4 rounded-full"
+                        style={{ backgroundColor: color.value }}
+                      />
                       <span>{color.name}</span>
                     </div>
                   </SelectItem>
@@ -163,9 +200,11 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
 
           <div>
             <Label htmlFor="icon">Icon</Label>
-            <Select 
-              value={formData.icon} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, icon: value as IconName }))}
+            <Select
+              value={formData.icon}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, icon: value as IconName }))
+              }
             >
               <SelectTrigger data-testid="select-icon">
                 <SelectValue>
@@ -174,7 +213,9 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
                       const Icon = getIcon(formData.icon);
                       return <Icon className="w-4 h-4" />;
                     })()}
-                    <span className="capitalize">{formData.icon.replace('-', ' ')}</span>
+                    <span className="capitalize">
+                      {formData.icon.replace("-", " ")}
+                    </span>
                   </div>
                 </SelectValue>
               </SelectTrigger>
@@ -185,7 +226,9 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
                     <SelectItem key={iconName} value={iconName}>
                       <div className="flex items-center space-x-2">
                         <Icon className="w-4 h-4" />
-                        <span className="capitalize">{iconName.replace('-', ' ')}</span>
+                        <span className="capitalize">
+                          {iconName.replace("-", " ")}
+                        </span>
                       </div>
                     </SelectItem>
                   );
@@ -195,16 +238,18 @@ export default function AddCategoryModal({ isOpen, onClose }: AddCategoryModalPr
           </div>
 
           <div className="flex space-x-3 pt-4">
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="flex-1 bg-primary hover:bg-blue-700"
               disabled={createCategoryMutation.isPending}
               data-testid="button-submit-category"
             >
-              {createCategoryMutation.isPending ? "Creating..." : "Create Category"}
+              {createCategoryMutation.isPending
+                ? "Creating..."
+                : "Create Category"}
             </Button>
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               variant="outline"
               onClick={onClose}
               data-testid="button-cancel"

@@ -1,10 +1,22 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -17,14 +29,18 @@ interface AddTransactionModalProps {
   selectedAccountId: string;
 }
 
-export default function AddTransactionModal({ isOpen, onClose, selectedAccountId }: AddTransactionModalProps) {
+export default function AddTransactionModal({
+  isOpen,
+  onClose,
+  selectedAccountId,
+}: AddTransactionModalProps) {
   const [formData, setFormData] = useState({
     type: "expense" as "income" | "expense",
     amount: "",
     categoryId: "",
     description: "",
     accountId: selectedAccountId,
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().split("T")[0],
   });
 
   const { toast } = useToast();
@@ -38,7 +54,9 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
     queryKey: ["/api/categories"],
   });
 
-  const filteredCategories = categories.filter(cat => cat.type === formData.type);
+  const filteredCategories = categories.filter(
+    (cat) => cat.type === formData.type
+  );
 
   const createTransactionMutation = useMutation({
     mutationFn: async (data: InsertTransaction) => {
@@ -71,14 +89,19 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
       categoryId: "",
       description: "",
       accountId: selectedAccountId,
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split("T")[0],
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.amount || !formData.categoryId || !formData.description || !formData.accountId) {
+
+    if (
+      !formData.amount ||
+      !formData.categoryId ||
+      !formData.description ||
+      !formData.accountId
+    ) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -106,14 +129,20 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
             Add a new income or expense transaction to track your finances.
           </DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label className="block text-sm font-medium text-gray-700 mb-1">Type</Label>
-            <RadioGroup 
-              value={formData.type} 
+            <Label className="block text-sm font-medium text-gray-700 mb-1">
+              Type
+            </Label>
+            <RadioGroup
+              value={formData.type}
               onValueChange={(value) => {
-                setFormData(prev => ({ ...prev, type: value as "income" | "expense", categoryId: "" }));
+                setFormData((prev) => ({
+                  ...prev,
+                  type: value as "income" | "expense",
+                  categoryId: "",
+                }));
               }}
               className="flex space-x-4"
               data-testid="radio-transaction-type"
@@ -128,7 +157,7 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
               </div>
             </RadioGroup>
           </div>
-          
+
           <div>
             <Label htmlFor="amount">Amount</Label>
             <div className="relative">
@@ -141,17 +170,21 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
                 className="pl-8"
                 placeholder="0.00"
                 value={formData.amount}
-                onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, amount: e.target.value }))
+                }
                 data-testid="input-amount"
               />
             </div>
           </div>
-          
+
           <div>
             <Label htmlFor="category">Category</Label>
-            <Select 
-              value={formData.categoryId} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, categoryId: value }))}
+            <Select
+              value={formData.categoryId}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, categoryId: value }))
+              }
               required
             >
               <SelectTrigger data-testid="select-category">
@@ -163,7 +196,7 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
                   return (
                     <SelectItem key={category.id} value={category.id}>
                       <div className="flex items-center space-x-2">
-                        <div 
+                        <div
                           className="w-4 h-4 rounded-full flex items-center justify-center"
                           style={{ backgroundColor: category.color }}
                         >
@@ -177,7 +210,7 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="description">Description</Label>
             <Input
@@ -186,16 +219,23 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
               required
               placeholder="Transaction description"
               value={formData.description}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
               data-testid="input-description"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="account">Account</Label>
-            <Select 
-              value={formData.accountId} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, accountId: value }))}
+            <Select
+              value={formData.accountId}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, accountId: value }))
+              }
               required
             >
               <SelectTrigger data-testid="select-account">
@@ -210,7 +250,7 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="date">Date</Label>
             <Input
@@ -218,22 +258,26 @@ export default function AddTransactionModal({ isOpen, onClose, selectedAccountId
               type="date"
               required
               value={formData.date}
-              onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, date: e.target.value }))
+              }
               data-testid="input-date"
             />
           </div>
-          
+
           <div className="flex space-x-3 pt-4">
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="flex-1 bg-primary hover:bg-blue-700"
               disabled={createTransactionMutation.isPending}
               data-testid="button-submit-transaction"
             >
-              {createTransactionMutation.isPending ? "Adding..." : "Add Transaction"}
+              {createTransactionMutation.isPending
+                ? "Adding..."
+                : "Add Transaction"}
             </Button>
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               variant="outline"
               onClick={onClose}
               data-testid="button-cancel"

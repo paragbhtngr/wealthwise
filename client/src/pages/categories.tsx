@@ -46,12 +46,16 @@ export default function Categories() {
   });
 
   // Filter categories
-  const filteredCategories = categories.filter(category =>
+  const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const expenseCategories = filteredCategories.filter(cat => cat.type === "expense");
-  const incomeCategories = filteredCategories.filter(cat => cat.type === "income");
+  const expenseCategories = filteredCategories.filter(
+    (cat) => cat.type === "expense"
+  );
+  const incomeCategories = filteredCategories.filter(
+    (cat) => cat.type === "income"
+  );
 
   const handleDeleteCategory = (category: Category) => {
     if (category.isDefault) {
@@ -68,7 +72,13 @@ export default function Categories() {
     }
   };
 
-  const CategoryGrid = ({ categories, title }: { categories: Category[], title: string }) => (
+  const CategoryGrid = ({
+    categories,
+    title,
+  }: {
+    categories: Category[];
+    title: string;
+  }) => (
     <Card data-testid={`card-${title.toLowerCase()}-categories`}>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
@@ -80,15 +90,15 @@ export default function Categories() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.map((category) => {
             const Icon = getIcon(category.icon as any);
-            
+
             return (
-              <div 
-                key={category.id} 
+              <div
+                key={category.id}
                 className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
                 data-testid={`category-${category.id}`}
               >
                 <div className="flex items-center space-x-3">
-                  <div 
+                  <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center"
                     style={{ backgroundColor: category.color }}
                   >
@@ -101,10 +111,10 @@ export default function Categories() {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex space-x-2">
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="sm"
                     onClick={() => setEditingCategory(category)}
                     data-testid={`button-edit-category-${category.id}`}
@@ -112,8 +122,8 @@ export default function Categories() {
                     <Edit className="w-4 h-4" />
                   </Button>
                   {!category.isDefault && (
-                    <Button 
-                      variant="ghost" 
+                    <Button
+                      variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteCategory(category)}
                       data-testid={`button-delete-category-${category.id}`}
@@ -133,7 +143,7 @@ export default function Categories() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Topbar title="Categories" selectedAccountId={selectedAccountId} />
-      
+
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
@@ -147,8 +157,8 @@ export default function Categories() {
               data-testid="input-search-categories"
             />
           </div>
-          
-          <Button 
+
+          <Button
             onClick={() => setShowAddModal(true)}
             className="bg-primary hover:bg-blue-700"
             data-testid="button-add-category"
@@ -162,20 +172,28 @@ export default function Categories() {
           <div className="text-center py-8">Loading categories...</div>
         ) : (
           <div className="space-y-6">
-            <CategoryGrid categories={expenseCategories} title="Expense Categories" />
-            <CategoryGrid categories={incomeCategories} title="Income Categories" />
+            <CategoryGrid
+              categories={expenseCategories}
+              title="Expense Categories"
+            />
+            <CategoryGrid
+              categories={incomeCategories}
+              title="Income Categories"
+            />
           </div>
         )}
 
         {!isLoading && filteredCategories.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500">No categories found</p>
-            <p className="text-sm text-gray-400">Try adjusting your search or add a new category</p>
+            <p className="text-sm text-gray-400">
+              Try adjusting your search or add a new category
+            </p>
           </div>
         )}
       </div>
 
-      <AddCategoryModal 
+      <AddCategoryModal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
       />
